@@ -5,6 +5,8 @@ import { type HasMany } from "@adonisjs/lucid/types/relations";
 
 
 export default class Gateways extends GatewaySchema {
+   public static table = 'gateways'
+
   @hasMany(() => Transaction)
   declare transactions: HasMany<typeof Transaction> | undefined 
 }

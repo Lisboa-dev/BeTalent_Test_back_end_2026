@@ -5,6 +5,8 @@ import { type HasMany } from "@adonisjs/lucid/types/relations";
 
 
 export default class Product extends ProductSchema {
+   public static table = 'products'
+  
   @hasMany(() => TransactionProduct)
   declare transactions: HasMany<typeof TransactionProduct> 
 }

@@ -3,6 +3,13 @@
   "compilerOptions": {
     "rootDir": "./",
     "jsx": "react",
-    "outDir": "./build"
+    "outDir": "./build",
+    "baseUrl": ".",
+    "paths": {
+      "@ioc:Adonis/Core/*": ["node_modules/@adonisjs/core/build/standalone/*"],
+      "@ioc:Adonis/Lucid/*": ["node_modules/@adonisjs/lucid/build/standalone/*"],
+      "@ioc:Adonis/Redis/*": ["node_modules/@adonisjs/redis/build/standalone/*"]  
+      }
+    
+    }
   }
-}

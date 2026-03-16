@@ -22,4 +22,4 @@ export  abstract class BasePaymentGateway{
 
 }
 
-export type ListGateways = {login:{}, gateway:BasePaymentGateway, adapter:AdapterGateway, name:string, priority:number}[]
+export type ListGateways = {login:{}, gateway:BasePaymentGateway, name:string, priority:number}[]

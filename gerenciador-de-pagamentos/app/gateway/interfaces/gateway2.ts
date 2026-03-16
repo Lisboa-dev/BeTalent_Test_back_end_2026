@@ -9,4 +9,3 @@ export interface CreatePaymentGateway2{
   numeroCartao: string,
   cvv: string
 }
-

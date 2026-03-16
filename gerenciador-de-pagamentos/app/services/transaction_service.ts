@@ -7,132 +7,133 @@ import db from '@adonisjs/lucid/services/db'
 import gatewayManagerFactory from '../gateway/gatewayFactory.ts'
 import { TransactionCreateDTO } from "../types/transactionDTO.ts";
 import { ClientSchema } from '#database/schema';
+import Client from '#models/client';
+import { Console } from 'console';
+
 
 
 export default class TransactionService {
-  
-
+ 
  async payment(data: TransactionCreateDTO) {
-
+  // Verifica se a transação já foi processada (idempotência)
   const existingTransaction = await Transactions
     .query()
-    .where('idempotency_key', data.idempotency_key)
+    .where('idempotencyKey', data.idempotency_key)
     .first()
 
   if (existingTransaction) {
-    return existingTransaction
+    return { message: "Transaction já foi processada", status: "skipped" }
   }
-    
+
   const trx = await db.transaction()
 
-   try {
-    
+  try {
     let price = 0
 
+    // Criar cliente se não existir
     if (!data.client) {
-      const client = await ClientSchema.create({
+      const client = await Client.create({
         email: data.email,
         name: data.name
-      }, { client: trx })
+      })
       data.client = client.id
     }
 
+    // Criar transação
     const transaction = await Transactions.create({
       client: data.client,
       idempotencyKey: data.idempotency_key,
       cardLastNumbers: data.payment.cardNumber.slice(-4),
-    }, { client: trx })
+    })
+    transaction.useTransaction(trx)
 
+    // Processar produtos
     for (const item of data.products) {
+      let product
+      try {
+        product = await Product.findOrFail(item.id)
+      } catch {
+        throw new Error(`Produto ${item.id} não encontrado`)
+      }
 
-
-      const product = await Product.findOrFail(item.id, { client: trx })
-
-      if (!product.stock || product.stock ==0 || product.stock < item.quantity) {
+      if (!product.stock || product.stock < item.quantity) {
         product.status = "not_stock"
         await product.save()
-        throw new Error("stock insuficiente")
+        throw new Error(`Estoque insuficiente para o produto ${item.id}`)
       }
 
       product.stock -= item.quantity
       await product.save()
 
-      if(product.price)price += product.price * item.quantity
+      if (product.price) price += product.price * item.quantity
 
-      await TransactionsProducts.create({
+      await (await TransactionsProducts.create({
         transactionId: transaction.id,
         productId: item.id,
         quantity: item.quantity
-      }, { client: trx })
-
+      })).useTransaction(trx)
     }
 
     transaction.value = price
-    await transaction.save()
 
-   
-
-
+    // Buscar gateways ativos do Redis
     let activeGateways: { name: string; priority: number }[] = []
-
-      // Pegar keys do Redis
     const keys = await redis.keys('gateway:*')
-
-      // Ler valores do Redis
     if (keys.length) {
-        const values = await Promise.all(keys.map(key => redis.get(key)))
-        activeGateways = values
-          .filter(Boolean) // remove nulls
-          .map(v => JSON.parse(v!))
-      }
+      activeGateways = (await Promise.all(keys.map(key => redis.get(key))))
+        .filter(Boolean)
+        .map(v => {
+          const gatewayData = JSON.parse(v!)
+          return { ...gatewayData, name: gatewayData.name.toLowerCase().trim() }
+        })
+    }
 
-      // Se não houver no Redis, buscar no banco
+    // Se não houver no Redis, buscar no banco
     if (!activeGateways.length) {
-        activeGateways = (await Gateways.query()
-          .where('is_active', true)
-          .select('name', 'priority'))
-          .map(g => ({
-            name: g.name,
-            priority: g.priority ?? 0
-          }))
-        
-        // Salvar no Redis para cache
+      activeGateways = (await Gateways.query()
+        .where('is_active', true)
+        .select('name', 'priority'))
+        .map(g => ({
+          name: g.name,
+          priority: g.priority ?? 0
+        }))
+
       for (const gateway of activeGateways) {
-          await redis.set(`gateway:${gateway.name}`, JSON.stringify(gateway)) // expira 1h
-        }
+        await redis.set(`gateway:${gateway.name}`, JSON.stringify(gateway)) // opcional: expire 1h
       }
+    }
 
-
-    
-   const manager = gatewayManagerFactory(activeGateways)
-
-    data.payment.price = price
-
-    
-
+    // Processar pagamento via gateway
+    const manager = gatewayManagerFactory(activeGateways)
+    data.payment.value = price
     const result = await manager.payment(data.payment)
 
     if (result.id) {
-      await trx.commit()
+      const gateway = await Gateways.query().where('name', result.gatewayName).first()
       transaction.status = 'approved'
-      transaction.gateway.name = result.gatewayName
+      transaction.gatewayId = gateway?.id ?? null
       transaction.externalId = result.id
-     await transaction.save()
-      
-      return result
+      await transaction.save()
+      await trx.commit()
+      return { status: result.status, message: 'Pagamento aprovado' }
     }
 
     await trx.rollback()
     throw new Error("Payment failed")
 
-  } catch (error) {
-
+  } catch (e) {
     await trx.rollback()
-    throw error
 
+    // Tratamento detalhado de ModelNotFound
+    if (e.name === 'ModelNotFoundException') {
+      console.error('Registro não encontrado:', e.message)
+      throw new Error(`Registro não encontrado: ${e.message}`)
+    }
+
+    console.error('Erro na transação:', e)
+    throw e
   }
 }
-
 
 
 

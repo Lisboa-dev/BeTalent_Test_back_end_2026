@@ -6,7 +6,7 @@ export default class Gateways extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('name').notNullable()
+      table.string('name').notNullable().unique()
       table.boolean('is_active').defaultTo(true)
       table.integer('priority').defaultTo(0).unique()
       table.timestamp('created_at').notNullable()

@@ -12,12 +12,10 @@ export interface listPaymentDTO{
   data: OutputGatewayDTO[]
 }
 export interface InputGatewayDTO{
-      id: string,
 			name: string,
 			email: string,
-			status: string,
 			cardNumber: string,
-			amount: number
+			value: number
       cvv:string
 }
 
@@ -38,4 +36,3 @@ export interface OutputGatewayDTO{
       id: string,
       gatewayName: string
   }
-

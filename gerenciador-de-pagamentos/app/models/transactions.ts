@@ -7,6 +7,8 @@ import Gateway from './gateways.ts'
 
 
 export default class Transactions extends TransactionSchema {
+     public static table = 'transactions'
+   
     @hasMany(() => TransactionProduct)
     declare itens: HasMany<typeof TransactionProduct> 
 

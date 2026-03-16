@@ -11,8 +11,8 @@ export default class Transactions extends BaseSchema {
         .integer('client')
         .unsigned()
         .references('id')
-        .inTable('clients')
-
+        .inTable('client')
+    
       table
         .integer('gateway_id')
         .unsigned()

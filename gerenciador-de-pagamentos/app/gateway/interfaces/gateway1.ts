@@ -2,8 +2,8 @@ export interface CreatePaymentGateway1{
   amount: number,
   name: string,
   email: string,
-  cardNumber: number,
-  cvv: number
+  cardNumber: string,
+  cvv: string
 }
 
 export interface LoginGateway{}

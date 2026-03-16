@@ -11,11 +11,6 @@
 import router from '@adonisjs/core/services/router'
 import server from '@adonisjs/core/services/server'
 import 'reflect-metadata'
-import register from './register.ts'
-
-register()
-  .then(res => console.log('Register result:', res))
-  .catch(err => console.error('Register failed:', err))
 
 
 /**

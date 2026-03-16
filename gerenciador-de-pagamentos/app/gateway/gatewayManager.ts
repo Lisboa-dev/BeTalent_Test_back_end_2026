@@ -4,17 +4,22 @@ import {ListGateways} from './baseGateway.ts'
 export default class GatewayManager {
   constructor(private listGateways: ListGateways) {}
 
-  async payment(data: CreatePaymentDTO): Promise<PaymentManagerResultDTO> {
+  async payment(data: CreatePaymentDTO ): Promise<PaymentManagerResultDTO> {
+    
     for (const item of this.listGateways) {
+      
       try {
+        
         await item.gateway.login(item.login)
         const result = await item.gateway.createPayment(data)
+        console.log("MANAGERRRRRR /n")
 
         if (result.id) {
           return {id:result.id, gatewayName:item.name, status:result.status, message:'success'}
         }
       } catch (error) {
-        console.error(`Gateway ${item.name} failed`)
+        console.error(`Gateway ${item.name} failed, erro:`+error)
+
       }
     }
 

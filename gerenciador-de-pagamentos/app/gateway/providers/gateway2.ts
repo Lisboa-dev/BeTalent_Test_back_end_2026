@@ -16,7 +16,7 @@ export class AdapterGateway2 extends AdapterGateway{
             nome:data.name,
             email:data.email,
             numeroCartao:data.cardNumber,
-            valor:data.amount,
+            valor:data.value,
             cvv:data.cvv
         } as CreatePaymentGateway2
      }
@@ -35,25 +35,25 @@ export  class Gateway2 extends BasePaymentGateway{
     private axios:AxiosInstance
     constructor(){
         super()
-        this.axios = axios.create({baseURL:'http://localhost:3002',})
+        this.axios = axios.create({baseURL:'http://localhost:3002',  headers: {
+        'Content-Type': 'application/json',
+      }})
     }
 
     async login(data:LoginGateway2){
         
-        this.axios.create({
-            headers:{
-                'Content-Type': 'application/json',
-                'Gateway-Auth-Token': 'tk_f2198cc671b5289fa856',
-                'Gateway-Auth-Secret':'3d15e8ed6131446ea7e3456728b1211f',
-            }
-        })
+      this.axios.defaults.headers.common['Gateway-Auth-Token'] = 'tk_f2198cc671b5289fa856'
+       this.axios.defaults.headers.common['Gateway-Auth-Secret'] = '3d15e8ed6131446ea7e3456728b1211f'
+        
         return
     
    } 
 
-   async createPayment(data: CreatePaymentGateway2): Promise<PaymentResultDTO>{
+   async createPayment(data: InputGatewayDTO): Promise<PaymentResultDTO>{
        try{
-        const response = await this.axios.post('/transacoes', data)
+        const request = new AdapterGateway2().to_provider(data)
+        const response = await this.axios.post('/transacoes', request)
+          console.log("gateway2 output ", response.data)
         return {message:response.data, status:response.status, id:response.data.id}
       }catch(e){
         throw Error('erro na criação de payment:'+e)

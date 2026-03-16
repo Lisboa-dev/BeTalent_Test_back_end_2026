@@ -1,23 +1,23 @@
-# imagem base do Node
+# Use Node 20 LTS como base
 FROM node:24-alpine
 
-# diretório da aplicação dentro do container
+# Defina o diretório de trabalho dentro do container
 WORKDIR /app
 
-# copia arquivos de dependências
+# Copie o package.json e package-lock.json antes para instalar dependências
 COPY package*.json ./
 
-# instala dependências
-RUN npm install
+# Instale dependências
+RUN npm install 
 
-# copia o restante do projeto
+# Copie o restante do código
 COPY . .
 
-# build do adonis
-RUN node ace build --production
-
-# porta usada pelo adonis
+# Exponha a porta padrão do Adonis
 EXPOSE 3333
 
-# comando que inicia o servidor
-CMD ["node", "build/server.js"]
+# Variável de ambiente para produção (opcional)
+ENV NODE_ENV=production
+
+# Comando para iniciar o Adonis
+CMD  ["sh", "-c", "node ace migration:run && node ace db:seed && node build/server.js"]

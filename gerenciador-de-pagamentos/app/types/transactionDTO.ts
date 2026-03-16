@@ -14,7 +14,7 @@ export interface Payment{
   email: string,
   cardNumber: string,
   cvv: string
-  price?:number
+  value?:number
 }
 
 export interface ProductToTransaction{

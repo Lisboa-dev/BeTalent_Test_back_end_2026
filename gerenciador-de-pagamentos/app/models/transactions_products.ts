@@ -5,7 +5,7 @@ import Product from "./product.ts";
 import { type BelongsTo } from "@adonisjs/lucid/types/relations";
 
 export default class TransactionsProducts extends TransactionProductSchema {
-
+  public static table = 'transaction_products'
 
 @belongsTo(() => Transactions)
 declare transaction: BelongsTo<typeof Transactions> | undefined
