@@ -43,15 +43,15 @@ Authorization: Bearer {token}
     {
       "name": "User Example",
       "email": "user@email.com",
-      "password": "123456",
-      "passwordConfirmation":"123456"
+      "password": "12345678",
+      "passwordConfirmation":"12345678"
     }
     ```
 -   **`POST /login`**: Autentica um usuário e retorna um token JWT.
     ```json
     {
       "email": "user@email.com",
-      "password": "123456"
+      "password": "12345678"
     }
     ```
     **Resposta Exemplo:**
