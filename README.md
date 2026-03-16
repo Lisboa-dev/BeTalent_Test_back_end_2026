@@ -206,6 +206,7 @@ node ace migration:run
 Para iniciar o banco de dados MySQL e o servidor Redis (o app também tem um imagem no dockerfile):
 
 ```bash
+node ace build (--ignore-ts-errors se aparecer algum)
 docker compose up -d
 ```
 
