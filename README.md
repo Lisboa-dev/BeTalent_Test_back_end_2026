@@ -233,4 +233,8 @@ node ace serve --watch
 
 ---
 
-**Desenvolvido por Manus AI**
+### tests
+
+```bash
+node ace test
+```
