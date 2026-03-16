@@ -136,15 +136,6 @@ O sistema implementa um controle de acesso baseado em papéis (Role-Based Access
 
 Cada rota define quais papéis podem acessá-la, garantindo a segurança e a segregação de funções.
 
-## 🏛️ Arquitetura de Gateways de Pagamento
-
-O sistema utiliza um `GatewayManager` para abstrair a integração com múltiplos provedores de pagamento. A arquitetura é projetada para alta disponibilidade e resiliência:
-
--   **`GatewayManager`**: Orquestra as chamadas aos gateways, tentando processar pagamentos em ordem de prioridade. Em caso de falha de um gateway, ele tenta o próximo disponível.
--   **`gatewayFactory`**: Responsável por instanciar e configurar os gateways de pagamento ativos, lendo suas configurações do banco de dados e/ou cache.
--   **Adapters**: Cada gateway possui um adapter (`AdapterGateway1`, `AdapterGateway2`) que traduz o formato de dados interno da aplicação para o formato específico exigido pelo provedor de pagamento.
--   **Tratamento de Erros**: O `GatewayManager` agora coleta e reporta erros detalhados de cada gateway que falha, facilitando a depuração e identificação de problemas específicos (ex: `Request failed with status code 400` para dados inválidos, `Network Error` para problemas de conectividade).
-
 ## ⚡ Gerenciamento de Cache com Redis
 
 Para otimizar o desempenho e reduzir a carga no banco de dados, a lista de gateways ativos é armazenada em cache no Redis.
