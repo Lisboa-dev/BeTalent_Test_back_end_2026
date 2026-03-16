@@ -210,17 +210,14 @@ node ace build (--ignore-ts-errors se aparecer algum)
 docker compose up -d
 ```
 
-Após iniciar os serviços com Docker Compose, você pode rodar o servidor da aplicação:
-
-```bash
-node ace serve --watch
-```
-
 ### Rodando o Servidor (sem Docker Compose para DB/Redis)
 
 Se você tiver MySQL e Redis instalados localmente e configurados no `.env`:
 
 ```bash
+node ace make:migrations run
+node ace db:seeds
+npm run test
 node ace serve --watch
 ```
 
