@@ -217,8 +217,8 @@ Se você tiver MySQL e Redis instalados localmente e configurados no `.env`:
 ```bash
 node ace make:migrations run
 node ace db:seeds
-npm run test
 node ace serve --watch
+npm run test (os testes são de api, precisa do servidor on)
 ```
 
 
