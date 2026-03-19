@@ -43,14 +43,15 @@ Authorization: Bearer {token}
     {
       "name": "User Example",
       "email": "user@email.com",
-      "password": "123456"
+      "password": "12345678",
+      "passwordConfirmation":"12345678"
     }
     ```
 -   **`POST /login`**: Autentica um usuário e retorna um token JWT.
     ```json
     {
       "email": "user@email.com",
-      "password": "123456"
+      "password": "12345678"
     }
     ```
     **Resposta Exemplo:**
@@ -136,15 +137,6 @@ O sistema implementa um controle de acesso baseado em papéis (Role-Based Access
 
 Cada rota define quais papéis podem acessá-la, garantindo a segurança e a segregação de funções.
 
-## 🏛️ Arquitetura de Gateways de Pagamento
-
-O sistema utiliza um `GatewayManager` para abstrair a integração com múltiplos provedores de pagamento. A arquitetura é projetada para alta disponibilidade e resiliência:
-
--   **`GatewayManager`**: Orquestra as chamadas aos gateways, tentando processar pagamentos em ordem de prioridade. Em caso de falha de um gateway, ele tenta o próximo disponível.
--   **`gatewayFactory`**: Responsável por instanciar e configurar os gateways de pagamento ativos, lendo suas configurações do banco de dados e/ou cache.
--   **Adapters**: Cada gateway possui um adapter (`AdapterGateway1`, `AdapterGateway2`) que traduz o formato de dados interno da aplicação para o formato específico exigido pelo provedor de pagamento.
--   **Tratamento de Erros**: O `GatewayManager` agora coleta e reporta erros detalhados de cada gateway que falha, facilitando a depuração e identificação de problemas específicos (ex: `Request failed with status code 400` para dados inválidos, `Network Error` para problemas de conectividade).
-
 ## ⚡ Gerenciamento de Cache com Redis
 
 Para otimizar o desempenho e reduzir a carga no banco de dados, a lista de gateways ativos é armazenada em cache no Redis.
@@ -211,16 +203,11 @@ node ace migration:run
 
 ### Rodando com Docker Compose (Recomendado para Desenvolvimento)
 
-Para iniciar o banco de dados MySQL e o servidor Redis:
+Para iniciar o banco de dados MySQL e o servidor Redis (o app também tem um imagem no dockerfile):
 
 ```bash
+node ace build (--ignore-ts-errors se aparecer algum)
 docker compose up -d
-```
-
-Após iniciar os serviços com Docker Compose, você pode rodar o servidor da aplicação:
-
-```bash
-node ace serve --watch
 ```
 
 ### Rodando o Servidor (sem Docker Compose para DB/Redis)
@@ -228,15 +215,9 @@ node ace serve --watch
 Se você tiver MySQL e Redis instalados localmente e configurados no `.env`:
 
 ```bash
-node ace migration:run
-node ace db:seed
 node ace serve --watch
+npm run test (os testes são de api, precisa do servidor on)
 ```
 
----
 
-### tests
-
-```bash
-node ace test
-```
+**Desenvolvido por Manus AI**
