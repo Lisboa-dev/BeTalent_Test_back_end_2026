@@ -42,7 +42,7 @@ export const userValidator = vine.create(userSchema)
 
 export const updateUserValidator = vine.create({
   fullName: vine.string().trim().minLength(3).optional(),
-  email: vine.string().email().nullable().optional(),
+  email: vine.string().email().optional(),
 })
 
 export const userCreateValidator = vine.create({
@@ -70,5 +70,5 @@ export const userUpdatePrivilageValidator = vine.create({
     'user',
     'manager',
     'finance'
-  ]).optional()
+  ])
 })

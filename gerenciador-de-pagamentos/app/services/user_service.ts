@@ -22,7 +22,10 @@
       const user = await User.findOrFail(userId)
       user.merge(data)
       await user.save()
-      return user
+      return {
+        name:user.fullName,
+        email:user.email
+      }
     } catch (error) {
       throw new Error(`Erro ao atualizar usuário ${userId}: ${error}`)
     }
@@ -62,7 +65,8 @@
 
     async showByUser(id: number){
       try {
-        return await User.query().where('id',id)
+        const user = await User.findOrFail(id)
+        return {name:user.fullName ,email:user.email, id:user.id, }
       } catch (error) {
         throw new Error(`Erro ao listar usuários: ${error}`)
       }

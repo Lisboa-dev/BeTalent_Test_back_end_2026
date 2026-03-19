@@ -91,9 +91,9 @@ const routes = {
     types: placeholder as Registry['product.products.show_by_user']['types'],
   },
   'User.privilages.update_privilege': {
-    methods: ["GET","HEAD"],
-    pattern: '/api/v1/manager',
-    tokens: [{"old":"/api/v1/manager","type":0,"val":"api","end":""},{"old":"/api/v1/manager","type":0,"val":"v1","end":""},{"old":"/api/v1/manager","type":0,"val":"manager","end":""}],
+    methods: ["PUT"],
+    pattern: '/api/v1/manager/:id/promote',
+    tokens: [{"old":"/api/v1/manager/:id/promote","type":0,"val":"api","end":""},{"old":"/api/v1/manager/:id/promote","type":0,"val":"v1","end":""},{"old":"/api/v1/manager/:id/promote","type":0,"val":"manager","end":""},{"old":"/api/v1/manager/:id/promote","type":1,"val":"id","end":""},{"old":"/api/v1/manager/:id/promote","type":0,"val":"promote","end":""}],
     types: placeholder as Registry['User.privilages.update_privilege']['types'],
   },
   'User.privilages.list': {

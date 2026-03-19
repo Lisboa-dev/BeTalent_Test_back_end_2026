@@ -25,7 +25,7 @@ export default class DatabaseSeeder extends BaseSeeder {
 
     const users: User[] = []
     for (const userData of usersData) {
-      const hashedPassword = await Hash.make(userData.password)
+      const hashedPassword = userData.password
       const user = await User.firstOrCreate({ email: userData.email }, { ...userData, password: hashedPassword })
       users.push(user)
     }

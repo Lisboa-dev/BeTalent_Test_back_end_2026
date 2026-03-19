@@ -18,7 +18,7 @@ export type ScannedRoutes = {
     'product.products.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'product.products.list_by_user': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'product.products.show_by_user': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'User.privilages.update_privilege': { paramsTuple?: []; params?: {} }
+    'User.privilages.update_privilege': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'User.privilages.list': { paramsTuple?: []; params?: {} }
     'User.privilages.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'User.privilages.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -42,7 +42,6 @@ export type ScannedRoutes = {
     'product.products.find_by_name': { paramsTuple: [ParamValue]; params: {'name': ParamValue} }
     'product.products.list_by_user': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'product.products.show_by_user': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'User.privilages.update_privilege': { paramsTuple?: []; params?: {} }
     'User.privilages.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'gateway.gateways.list': { paramsTuple?: []; params?: {} }
     'transaction.transaction.list': { paramsTuple?: []; params?: {} }
@@ -59,7 +58,6 @@ export type ScannedRoutes = {
     'product.products.find_by_name': { paramsTuple: [ParamValue]; params: {'name': ParamValue} }
     'product.products.list_by_user': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'product.products.show_by_user': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'User.privilages.update_privilege': { paramsTuple?: []; params?: {} }
     'User.privilages.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'gateway.gateways.list': { paramsTuple?: []; params?: {} }
     'transaction.transaction.list': { paramsTuple?: []; params?: {} }
@@ -80,6 +78,7 @@ export type ScannedRoutes = {
   PUT: {
     'profile.user.update': { paramsTuple?: []; params?: {} }
     'product.products.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'User.privilages.update_privilege': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'User.privilages.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'gateway.gateways.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }

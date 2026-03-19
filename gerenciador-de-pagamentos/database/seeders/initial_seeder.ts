@@ -42,8 +42,8 @@ export default class InitialSeeder extends BaseSeeder {
       }
 
       // 3️⃣ Registrar admin user usando o modelo User
-      const adminEmail = 'admin@system2.com'
-      const adminPassword = await Hash.make('admin')
+      const adminEmail = 'admin@system4.com'
+      const adminPassword = 'admin123'
       let adminUser = await User.findBy('email', adminEmail)
 
       if (!adminUser) {

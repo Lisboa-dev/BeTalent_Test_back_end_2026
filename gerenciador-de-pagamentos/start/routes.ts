@@ -66,7 +66,7 @@ router
 
       router 
         .group(() => {
-          router.get('/', [controllers.Privilages, 'UpdatePrivilege']).use(middleware.auth()).use(middleware.role(['admin'])),
+          router.put('/:id/promote', [controllers.Privilages, 'updatePrivilege']).use(middleware.auth()).use(middleware.role(['admin'])),
           router.post('/', [controllers.Privilages, 'list']).use(middleware.auth()).use(middleware.auth()).use(middleware.role(['admin', 'manager', ])),
           router.get('/:id', [controllers.Privilages, 'show']).use(middleware.auth()).use(middleware.role(['admin', 'manager', ])),
           router.put('/:id', [controllers.Privilages, 'update']).use(middleware.auth()).use(middleware.role(['admin', 'manager', ])),

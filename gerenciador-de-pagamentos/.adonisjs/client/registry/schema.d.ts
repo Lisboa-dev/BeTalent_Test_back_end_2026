@@ -59,12 +59,12 @@ export interface Registry {
     methods: ["PUT"]
     pattern: '/api/v1/account'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/user').updateUserValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').updateUserValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/user_controller').default['update']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/user_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'profile.user.show': {
@@ -176,15 +176,15 @@ export interface Registry {
     }
   }
   'User.privilages.update_privilege': {
-    methods: ["GET","HEAD"]
-    pattern: '/api/v1/manager'
+    methods: ["PUT"]
+    pattern: '/api/v1/manager/:id/promote'
     types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/privilages_controller').default['UpdatePrivilege']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/privilages_controller').default['UpdatePrivilege']>>>
+      body: ExtractBody<InferInput<(typeof import('#validators/user').userUpdatePrivilageValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').userUpdatePrivilageValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/privilages_controller').default['updatePrivilege']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/privilages_controller').default['updatePrivilege']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'User.privilages.list': {

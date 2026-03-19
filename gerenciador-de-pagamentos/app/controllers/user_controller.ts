@@ -3,7 +3,7 @@ import UserService from '#services/user_service'
 import { updateUserValidator } from '#validators/user'
 import sanitizeDTO from '#validators/sanitize'
 import {}from '../types/userDTO.ts'
-import type { HttpContext } from '@adonisjs/core/http'
+import type { HttpContext, HttpRequest } from '@adonisjs/core/http'
 
 
 
@@ -12,18 +12,21 @@ export default class UsersController {
     private userService = new UserService()
 
 
-    async show({auth}: HttpContext) {
+    async show({auth, response}: HttpContext) {
         const id= auth.user?.id
-        if(!id) return
-       return await this.userService.showByUser(id)
+        if(!id) return  response.unauthorized()
+        return await this.userService.showByUser(id)
+       
     }
 
-    async update ({auth, request}: HttpContext) {
+    async update ({auth, request, response}: HttpContext) {
         const id= auth.user?.id
-        if(!id) return
-        const cleanData= sanitizeDTO(request.all())
-        const data= await cleanData.validateUsing(updateUserValidator)
-        this.userService.updateByUser(id, data)
+        if(!id) return response.unauthorized()
+        const data= await request.validateUsing(updateUserValidator)
+       if(data.email || data.fullName){
+        return await this.userService.updateByUser(id, data)
+      }
+       return response.badRequest()
     }
 
    
