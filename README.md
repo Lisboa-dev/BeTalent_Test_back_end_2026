@@ -228,6 +228,8 @@ node ace serve --watch
 Se você tiver MySQL e Redis instalados localmente e configurados no `.env`:
 
 ```bash
+node ace migration:run
+node ace db:seed
 node ace serve --watch
 ```
 
