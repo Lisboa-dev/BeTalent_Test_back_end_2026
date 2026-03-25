@@ -72,8 +72,6 @@ async function createUser(data: { fullName: string; email: string; password: str
         throw new Error(`Erro ao obter usuário existente: ${error.message}, data: ${error.data}`)
       }
     }
-    console.log("erro")
-    console.log(error)
     throw new Error(`Erro ao criar o user: ${error.message}, data: ${error.data}`)
     
   }

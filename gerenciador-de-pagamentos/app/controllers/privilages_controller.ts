@@ -34,7 +34,7 @@ export default class PrivilegesController {
     finalData
   ) 
     console.log('update')
-   console.log(update)
+   console.log(update.$attributes)
 
   return update
 }
